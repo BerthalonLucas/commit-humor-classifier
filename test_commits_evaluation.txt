@@ -1,0 +1,25 @@
+fix typo in README
+Ajout d'un point-virgule oublié
+Optimise la boucle for, ça va plus vite
+troisieme tentative de faire marcher cette foutue moulinette
+supprime tous les bugs (lol)
+mise à jour de la licence
+Olivier please sauve-moi... encore
+add tests (who needs prod anyway?)
+forgot to commit again, shame
+réécriture complète du projet à 3h du mat
+cleanup code
+ajout d'une punition canine: 'woof!'
+Make compiler happy 
+Patch critical security hole
+Removes debug printf because manager is watching
+Implement user authentication
+Ajout d'un easter egg secret
+hotfix: crash on launch
+Dernière chance avant l'apocalypse
+Add cat gifs because why not
+Refactor monolith into bigger monolith
+Remove all logs, who needs debugging
+Compression de l'âme humaine en JSON
+Fix tests, they work on my machine
+Add TODOs for future me (hello future me!)
