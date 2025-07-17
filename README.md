@@ -1,17 +1,34 @@
 # 🤖 Classificateur d'Humour pour Messages de Commit
 
-Un classificateur d'humour basé sur **EuroBERT-210m** fine-tuné avec **LoRA** pour analyser si un message de commit Git est drôle ou pas.
+Un classificateur d'humour basé sur **EuroBERT-210m** optimisé avec **Optuna** pour analyser si un message de commit Git est drôle ou pas.
 
-**🔄 Nouveau** : Le modèle est maintenant téléchargé automatiquement depuis **Hugging Face** au premier usage !
+**🎯 Performance** : 85.3% précision globale, 82.9% précision "funny"
+**🔄 Nouveau** : Installation automatique avec détection hardware + traitement JSON en temps réel !
 
-## 🚀 Démarrage Rapide
+## 🚀 Installation Automatique
 
 ```bash
-# Installation des dépendances
-pip install -r requirements.txt
+# Installation intelligente (détecte GPU/CPU automatiquement)
+python install.py
 
+# Force CPU même si GPU détecté
+python install.py --force-cpu
+
+# Force GPU (échoue si pas de GPU)
+python install.py --gpu-only
+
+# Démarrage rapide (pour les nouveaux utilisateurs)
+python quick_start.py
+```
+
+## ⚡ Démarrage Rapide
+
+```bash
 # Test rapide (téléchargement automatique du modèle)
 python commit_humor_classifier.py "gcc et moi c'est compliqué"
+
+# Test de l'installation
+python test_installation.py
 ```
 
 > 💡 **Note** : Au premier usage, le modèle sera téléchargé automatiquement depuis Hugging Face (~420MB). Une connexion internet est requise uniquement pour ce téléchargement initial.
@@ -31,6 +48,21 @@ python commit_humor_classifier.py --interactive
 ### Mode Batch
 ```bash
 python commit_humor_classifier.py --batch test_messages.txt
+```
+
+### Traitement de Commits JSON
+```bash
+# Traiter un fichier JSON de commits (format exam-2024-09-13.json)
+python process_commits_json.py commits.json
+
+# Sauvegarder les résultats
+python process_commits_json.py commits.json --output results.json
+
+# Mode surveillance (traite les nouveaux commits en temps réel)
+python process_commits_json.py commits.json --watch --interval 5
+
+# Afficher les statistiques détaillées
+python process_commits_json.py commits.json --stats
 ```
 
 ### Options Avancées
@@ -67,18 +99,31 @@ $ python commit_humor_classifier.py "Add cat gifs because why not"
 
 ```
 commit-humor-classifier/
-├── commit_humor_classifier.py    # Script principal
-├── eurobert_full/               # Modèle téléchargé (créé automatiquement)
-├── refusion_lora.py             # Script de refusion LoRA
-├── requirements.txt             # Dépendances
-├── setup.py                     # Installation
-├── test_commits_evaluation.txt  # Messages de test
-├── deploy_package.py            # Script de déploiement
-├── REFUSION_GUIDE.md            # Guide de refusion
-└── README.md                    # Documentation
+├── 🚀 Scripts Principaux
+│   ├── commit_humor_classifier.py    # Classificateur principal
+│   ├── process_commits_json.py       # Traitement JSON en temps réel
+│   ├── install.py                    # Installation automatique
+│   └── quick_start.py                # Démarrage rapide pour nouveaux utilisateurs
+├── 🧪 Tests et Validation
+│   ├── test_installation.py          # Test d'installation (généré auto)
+│   ├── test_commits_evaluation.txt   # Messages de test
+│   └── test_messages.txt             # Exemples de test
+├── 📁 Modèle et Configuration
+│   ├── eurobert_full/                # Modèle téléchargé (créé auto)
+│   ├── requirements.txt              # Dépendances Python
+│   └── .gitignore                    # Fichiers ignorés
+├── 🔧 Scripts Utilitaires
+│   ├── deploy.py                     # Script de déploiement et création d'archives
+│   ├── update.py                     # Script de mise à jour automatique
+│   └── config.json                   # Configuration du projet
+├── 📦 Déploiement
+│   ├── deployment_info.json          # Informations de déploiement
+│   └── deploy/                       # Dossier de déploiement (créé auto)
+└── 📚 Documentation
+    └── README.md                     # Documentation principale
 ```
 
-> 💡 **Note** : Le dossier `eurobert_full/` est créé automatiquement lors du premier téléchargement du modèle depuis Hugging Face.
+> 💡 **Note** : Le dossier `eurobert_full/` et `test_installation.py` sont créés automatiquement.
 
 ## 🔧 Prérequis
 
@@ -97,15 +142,34 @@ commit-humor-classifier/
 
 ## 🚚 Déploiement
 
-### Installation Automatique
+### Déploiement Automatique
+
 ```bash
-python deploy_package.py
+# Créer un package portable complet
+python deploy.py --package
+
+# Créer une archive ZIP pour distribution
+python deploy.py --archive
+
+# Créer package + archive + nettoyage
+python deploy.py --all
+
+# Nettoyer les fichiers temporaires
+python deploy.py --clean
 ```
 
 ### Installation Manuelle
 ```bash
 pip install -e .
 ```
+
+### Distribution
+
+Le script `deploy.py` crée automatiquement :
+- Un package portable dans `deploy/package/`
+- Une archive ZIP dans `deploy/archives/`
+- Un script de démarrage rapide `quick_start.py`
+- Les informations de déploiement `deployment_info.json`
 
 ### Utilisation en tant que module
 ```python
@@ -129,10 +193,78 @@ print(result)
 
 ## 🎪 Cas d'Usage
 
+### 🔄 Temps Réel
+- **Surveillance de commits** : Traitement automatique des nouveaux commits JSON
 - **Hooks Git** : Validation automatique des messages
+- **CI/CD Pipeline** : Intégration dans les workflows
+- **Monitoring** : Surveillance continue des repositories
+
+### 📊 Analyse et Statistiques
 - **Code Review** : Détection d'humour dans les PR
-- **Statistiques** : Analyse des patterns d'équipe
-- **Bots** : Intégration Discord/Slack/Teams
+- **Statistiques d'équipe** : Analyse des patterns d'humour
+- **Rapports** : Génération de métriques sur l'humour
+- **Dashboards** : Visualisation des tendances
+- **Tendances** : Évolution de l'humour dans le temps
+
+### 🤖 Intégrations et Automatisation
+- **Bots** : Discord/Slack/Teams/Mattermost
+- **APIs** : Endpoints REST pour classification
+- **Webhooks** : Traitement automatique des événements Git
+- **Microservices** : Service de classification dédié
+
+### Distribution et Déploiement
+- **Packages portables** : Distribution facile via `deploy.py`
+- **Archives ZIP** : Partage simplifié
+- **Installation automatique** : Déploiement en un clic
+- **Démarrage rapide** : Script `quick_start.py` pour nouveaux utilisateurs
+- **Mise à jour automatique** : Script `update.py` pour maintenir à jour
+- **Configuration centralisée** : Fichier `config.json` pour la personnalisation
+
+## 📋 Format JSON Supporté
+
+Le script `process_commits_json.py` supporte le format JSON standard des commits :
+
+```json
+[
+  {
+    "sha": "d505efb38b3e24e06923be4333a7c3fd874a1856",
+    "repo": {
+      "org": "exam-2024-09-13",
+      "name": "oligrien_c-piscine-exam-01_exam_13h27m03s",
+      "full_name": "exam-2024-09-13/oligrien_c-piscine-exam-01_exam_13h27m03s"
+    },
+    "author": {
+      "name": "Exam 42",
+      "email": "exam-no-reply@42.fr",
+      "date": "2024-09-13T18:00:03+02:00"
+    },
+    "committer": {
+      "name": "Exam 42",
+      "email": "exam-no-reply@42.fr",
+      "date": "2024-09-13T18:00:03+02:00"
+    },
+    "message": "gcc et moi c'est compliqué"
+  }
+]
+```
+
+### 📤 Format de Sortie
+
+Les résultats incluent la classification d'humour :
+
+```json
+{
+  "sha": "d505efb38b3e24e06923be4333a7c3fd874a1856",
+  "message": "gcc et moi c'est compliqué",
+  "humor_classification": {
+    "message": "gcc et moi c'est compliqué",
+    "is_funny": true,
+    "confidence": 0.847,
+    "label": "DRÔLE",
+    "processed_at": "2025-01-27T10:30:45.123456"
+  }
+}
+```
 
 ## 🛠️ Développement
 
@@ -192,6 +324,39 @@ python refusion_lora.py --lora_path ../eurobert_peft_v4 --replace_current --back
 2. **Fusionner** avec `refusion_lora.py`
 3. **Tester** sur les données d'évaluation
 4. **Remplacer** le modèle actuel si satisfaisant
+
+## 🔄 Maintenance et Mises à Jour
+
+### Mise à Jour Automatique
+
+```bash
+# Vérifier les mises à jour disponibles
+python update.py --check
+
+# Mise à jour complète (dépendances + modèle)
+python update.py
+
+# Mise à jour des dépendances uniquement
+python update.py --dependencies
+
+# Mise à jour du modèle uniquement
+python update.py --model
+
+# Forcer la mise à jour
+python update.py --force
+```
+
+### Configuration
+
+Le fichier `config.json` permet de personnaliser :
+- Paramètres du modèle
+- URLs de téléchargement
+- Seuils de classification
+- Options de performance
+
+### Sauvegarde
+
+Le script de mise à jour crée automatiquement des sauvegardes dans `backup/` avant toute modification.
 
 ## 🐛 Dépannage
 

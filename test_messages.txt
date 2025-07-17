@@ -1,5 +1,0 @@
-fix typo in README
-gcc et moi c'est compliqué
-Add cat gifs because why not
-Implement user authentication
-supprime tous les bugs (lol)

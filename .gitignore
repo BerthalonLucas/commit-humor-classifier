@@ -1,12 +1,11 @@
-# Byte-compiled / optimized / DLL files
+# 🤖 Classificateur d'Humour - Fichiers Ignorés
+# ===============================================
+
+# 🐍 Python
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
 *.so
-
-# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -26,17 +25,13 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+# 📦 Packaging
 *.manifest
 *.spec
-
-# Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# 🧪 Tests et Coverage
 htmlcov/
 .tox/
 .nox/
@@ -50,76 +45,19 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+test_results/
+results/
 
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
+# 📝 Logs et Temporaires
 *.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
+logs/
+temp/
+tmp/
+*.tmp
+*.cache
+.cache/
 
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-.pybuilder/
-target/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-#   For a library or package, you might want to ignore these files since the code is
-#   intended to run in multiple environments; otherwise, check them in:
-.python-version
-
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
-
-# poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-#poetry.lock
-
-# pdm
-#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
-#pdm.lock
-#   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
-#   in version control.
-#   https://pdm.fming.dev/#use-with-ide
-.pdm.toml
-
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
-__pypackages__/
-
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
+# 🌐 Environnements
 .env
 .venv
 env/
@@ -128,67 +66,91 @@ ENV/
 env.bak/
 venv.bak/
 dataset_env/
+commit_env/
+*.venv
 
-# Spyder project settings
+# 🤖 Modèles et Données
+eurobert_full/
+eurobert_*/
+models/
+checkpoints/
+*.bin
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+
+# 📊 Données et Résultats
+*_results.json
+*_output.json
+*_processed.json
+commits_*.json
+exam-*.json
+!test_*.txt
+!test_*.json
+
+# 🔧 IDEs et Éditeurs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
 .spyderproject
 .spyproject
-
-# Rope project settings
 .ropeproject
 
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# pytype static type analyzer
-.pytype/
-
-# Cython debug symbols
-cython_debug/
-
-# PyCharm
-#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-#  be added to the global gitignore or merged into this project gitignore.  For a PyCharm
-#  project, it is recommended to keep the .idea directory under version control.
-.idea/
-
-# VS Code
-.vscode/
-
-# macOS
+# 💻 Système
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
+*.lnk
 
-# Windows
-*.tmp
-*.temp
-desktop.ini
+# 📱 Jupyter
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
 
-# Model files that might be too large for git
-# (Uncomment if you want to exclude the model)
-# eurobert_full/
+# 🚀 Scripts Générés Automatiquement
+test_installation.py
 
-# Deployment artifacts
-commit-humor-classifier-portable/
+# 🔐 Tokens et Secrets
+.env.local
+.env.*.local
+token.txt
+*.token
+hf_token
+
+# 📈 Monitoring et Métriques
+wandb/
+mlruns/
+tensorboard_logs/
+
+# 🗃️ Bases de Données
+*.db
+*.sqlite
+*.sqlite3
+
+# 📋 Fichiers de Configuration Locaux
+config.local.json
+settings.local.json
+
+# 🎯 Fichiers de Test Personnalisés
+my_test_*.txt
+my_commits_*.json
+personal_*.json
+
+# 📦 Archives
 *.zip
+*.tar.gz
+*.rar
+*.7z
 
-# Training logs and checkpoints
-logs/
-checkpoints/
-runs/
+# 🔄 Sauvegardes
+*.bak
+*.backup
+*.old
+eurobert_full_backup*/
 
-# Cache directories
-.cache/
-.huggingface/
+# 📊 Rapports
+report_*.html
+stats_*.json
+metrics_*.json
