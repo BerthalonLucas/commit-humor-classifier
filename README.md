@@ -220,6 +220,24 @@ print(result)
 - **Mise à jour automatique** : Script `update.py` pour maintenir à jour
 - **Configuration centralisée** : Fichier `config.json` pour la personnalisation
 
+### 📺 Application Web Locale
+
+Une petite application Flask permet d'afficher en grand les commits
+jugés drôles en temps réel. Le fichier JSON surveillé est relu toutes
+les minutes et seuls les nouveaux messages sont classifiés.
+
+```bash
+# Installation des dépendances supplémentaires
+pip install Flask
+
+# Lancement (utilise commits.json par défaut)
+python web_app.py
+```
+
+Définissez la variable d'environnement `COMMITS_JSON` pour indiquer un
+autre fichier. Ouvrez ensuite `http://localhost:5000` pour consulter la
+liste mise à jour.
+
 ## 📋 Format JSON Supporté
 
 Le script `process_commits_json.py` supporte le format JSON standard des commits :
