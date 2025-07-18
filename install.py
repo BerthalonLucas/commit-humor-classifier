@@ -102,20 +102,23 @@ def check_package_installed(package):
     except ImportError:
         return False
 
-def install_base_dependencies():
+def install_base_dependencies(force_cpu=False):
     """Installe les dépendances de base"""
     print("\n🔧 Installation des dépendances de base...")
-    
+
     base_packages = [
         ("transformers", "Bibliothèque Hugging Face Transformers"),
         ("huggingface_hub", "Client Hugging Face Hub"),
         ("datasets", "Gestion des datasets"),
-        ("accelerate", "Accélération des modèles"),
         ("safetensors", "Format de sauvegarde sécurisé"),
         ("numpy", "Calculs numériques"),
         ("requests", "Requêtes HTTP")
     ]
-    
+
+    # N'installer accelerate que si force_cpu n'est pas activé
+    if not force_cpu:
+        base_packages.insert(3, ("accelerate", "Accélération des modèles"))
+
     success = True
     for package, description in base_packages:
         if check_package_installed(package):
@@ -123,7 +126,7 @@ def install_base_dependencies():
         else:
             if not install_package(package, description):
                 success = False
-    
+
     return success
 
 def install_pytorch_gpu():
@@ -298,7 +301,7 @@ def main():
     print()
     
     # Installation des dépendances de base
-    if not install_base_dependencies():
+    if not install_base_dependencies(args.force_cpu):
         print("❌ Échec de l'installation des dépendances de base")
         sys.exit(1)
     

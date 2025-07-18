@@ -68,7 +68,7 @@ def download_model_from_hf(model_id, local_dir):
 class CommitHumorClassifier:
     """Classificateur d'humour pour messages de commit"""
     
-    def __init__(self, model_path="eurobert_full", model_id="shadow-commits/eurobert-commit-humor-classifier", seuil=0.7):
+    def __init__(self, model_path="eurobert_full", model_id="LBerthalon/eurobert-commit-humor", seuil=0.35):
         """
         Initialise le classificateur
         
@@ -239,9 +239,9 @@ Exemples d'utilisation:
     parser.add_argument('message', nargs='?', help='Message de commit à classifier')
     parser.add_argument('--interactive', '-i', action='store_true', help='Mode interactif')
     parser.add_argument('--batch', '-b', help='Fichier contenant les messages (un par ligne)')
-    parser.add_argument('--seuil', '-s', type=float, default=0.7, help='Seuil de décision (défaut: 0.7)')
+    parser.add_argument('--seuil', '-s', type=float, default=0.35, help='Seuil de décision (défaut: 0.35)')
     parser.add_argument('--model', '-m', default='eurobert_full', help='Chemin local vers le modèle')
-    parser.add_argument('--model-id', default='shadow-commits/eurobert-commit-humor-classifier', help='ID du modèle sur Hugging Face')
+    parser.add_argument('--model-id', default='LBerthalon/eurobert-commit-humor', help='ID du modèle sur Hugging Face')
     
     args = parser.parse_args()
     
