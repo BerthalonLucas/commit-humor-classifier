@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Commits Drôles</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #1e1e1e; color: #f0f0f0; margin: 0; padding: 20px; }
+        h1 { text-align: center; font-size: 3em; margin-bottom: 0.2em; }
+        ul { list-style: none; padding: 0; max-width: 1200px; margin: auto; }
+        li { background: #333; margin: 0.5em 0; padding: 1em; border-radius: 8px; font-size: 1.5em; }
+        .prob { float: right; font-size: 0.7em; color: #9acd32; }
+    </style>
+</head>
+<body>
+    <h1>Commits Drôles</h1>
+    <ul id="commit-list"></ul>
+    <script>
+        async function fetchCommits() {
+            const resp = await fetch('/funny_commits');
+            const commits = await resp.json();
+            const list = document.getElementById('commit-list');
+            list.innerHTML = '';
+            commits.forEach(c => {
+                const li = document.createElement('li');
+                li.textContent = c.message;
+                const span = document.createElement('span');
+                span.className = 'prob';
+                span.textContent = (c.probability * 100).toFixed(1) + '%';
+                li.appendChild(span);
+                list.appendChild(li);
+            });
+        }
+        fetchCommits();
+        setInterval(fetchCommits, 5000);
+    </script>
+</body>
+</html>
