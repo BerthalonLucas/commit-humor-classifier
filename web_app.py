@@ -11,6 +11,7 @@ import os
 import json
 import threading
 import time
+import logging
 from hashlib import md5
 from datetime import datetime
 from typing import List, Dict
@@ -29,10 +30,32 @@ PROCESSED_IDS = set()
 JSON_FILE = os.environ.get("COMMITS_JSON", "commits.json")
 # Intervalle de rafraîchissement (secondes)
 UPDATE_INTERVAL = 60
+# Mode debug activé/désactivé via variable d'environnement
+DEBUG_MODE = os.environ.get("DEBUG_PREDICTIONS", "false").lower() == "true"
+
+# Configuration du logging pour le debug
+logger = None
+if DEBUG_MODE:
+    # Configuration spécifique pour éviter les conflits avec Flask
+    logger = logging.getLogger('commit_debug')
+    logger.setLevel(logging.INFO)
+    
+    # Créer un handler pour la console si pas déjà présent
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        handler.setLevel(logging.INFO)
+        formatter = logging.Formatter('%(asctime)s - DEBUG - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.propagate = False  # Éviter la duplication avec le logger root
 
 # Initialisation du classificateur
-classifier = CommitHumorClassifier(seuil=0.7)
+classifier = CommitHumorClassifier(seuil=0.65)
 classifier.load_model()
+
+# Message de confirmation du mode debug
+if DEBUG_MODE and logger:
+    logger.info("🐛 Mode debug activé - Les prédictions seront loggées")
 
 
 def get_commit_id(commit: Dict) -> str:
@@ -71,8 +94,14 @@ def update_commits_loop() -> None:
                 continue
             try:
                 result = classifier.predict(message)
-            except Exception:
+                # Log de debug sur une seule ligne
+                if DEBUG_MODE and logger:
+                    status = "FUNNY" if result["is_funny"] else "NORMAL"
+                    logger.info(f"PREDICTION: [{status}] P={result['probability']:.3f} | {message[:80]}{'...' if len(message) > 80 else ''}")
+            except Exception as e:
                 # En cas d'erreur de prédiction, on ignore le commit
+                if DEBUG_MODE and logger:
+                    logger.error(f"PREDICTION ERROR: {str(e)[:50]} | {message[:50]}{'...' if len(message) > 50 else ''}")
                 PROCESSED_IDS.add(cid)
                 continue
             if result["is_funny"]:

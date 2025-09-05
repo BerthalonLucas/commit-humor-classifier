@@ -1,11 +1,80 @@
 # 🤖 Classificateur d'Humour pour Messages de Commit
 
-Un classificateur d'humour basé sur **EuroBERT-210m** optimisé avec **Optuna** pour analyser si un message de commit Git est drôle ou pas.
+Un classificateur d'humour basé sur **EuroBERT-210m** pour analyser si un message de commit Git est drôle ou pas.
+
+---
+
+## ⚡ Installation Rapide (Pour Exam à 42)
+
+### 1. Cloner le projet
+```bash
+git clone <url-du-repo>
+cd commit-humor-classifier
+```
+
+### 2. Créer un environnement virtuel
+```bash
+# Windows
+python -m venv .venv
+
+# Linux/Mac
+python3 -m venv .venv
+```
+> 💡 L'environnement virtuel évite d'installer les packages ailleurs que pour ce projet.
+
+### 3. Activer l'environnement virtuel
+```bash
+# Windows
+.venv\Scripts\activate
+
+# Linux/Mac
+source .venv/bin/activate
+```
+
+### 4. Installer les dépendances
+```bash
+# ⚠️ ATTENTION : Si vous n'avez pas de GPU ou peu d'espace disque, utilisez OBLIGATOIREMENT :
+python install.py --force-cpu
+
+# Sinon, installation normale (télécharge +5Go de packages NVIDIA) :
+python install.py
+```
+> 🚨 **WARNING IMPORTANT** : Sans le flag `--force-cpu`, le package `accelerate` installera automatiquement les packages NVIDIA qui font plus de 5Go ! Utilisez `--force-cpu` si vous n'avez pas de GPU ou peu d'espace.
+
+### 5. Configurer le fichier de commits
+```bash
+# Windows
+set COMMITS_JSON=chemin/vers/votre/fichier.json
+
+# Linux/Mac
+export COMMITS_JSON=chemin/vers/votre/fichier.json
+```
+
+### 6. Installer Flask
+```bash
+pip install flask
+```
+
+### 7. Lancer l'interface web
+```bash
+python web_app.py
+```
+> 🌐 Ouvrez http://localhost:5000 pour voir les commits drôles s'afficher !
+
+# Interface web avec mode debug des prédictions
+set DEBUG_PREDICTIONS=true
+python web_app.py
+
+**✅ C'est tout ! Pour une installation pendant un exam à 42, la partie ci-dessus suffit.**
+
+---
+
+## 📚 Documentation Complète
 
 **🎯 Performance** : 85.3% précision globale, 82.9% précision "funny"
 **🔄 Nouveau** : Installation automatique avec détection hardware + traitement JSON en temps réel !
 
-## 🚀 Installation Automatique
+### 🚀 Installation Automatique Avancée
 
 ```bash
 # Installation intelligente (détecte GPU/CPU automatiquement)
@@ -17,8 +86,12 @@ python install.py --force-cpu
 # Force GPU (échoue si pas de GPU)
 python install.py --gpu-only
 
-# Démarrage rapide (pour les nouveaux utilisateurs)
-python quick_start.py
+# Interface web (après installation de Flask)
+python web_app.py
+
+# Interface web avec mode debug des prédictions
+set DEBUG_PREDICTIONS=true
+python web_app.py
 ```
 
 ## ⚡ Démarrage Rapide
@@ -27,11 +100,11 @@ python quick_start.py
 # Test rapide (téléchargement automatique du modèle)
 python commit_humor_classifier.py "gcc et moi c'est compliqué"
 
-# Test de l'installation
-python test_installation.py
+# Configurer la variable d'environnement pour le JSON
+# set COMMITS_JSON=chemin/vers/votre/commits.json
 ```
 
-> 💡 **Note** : Au premier usage, le modèle sera téléchargé automatiquement depuis Hugging Face (~420MB). Une connexion internet est requise uniquement pour ce téléchargement initial.
+> 💡 **Note** : Au premier usage, le modèle sera téléchargé automatiquement depuis Hugging Face (~420MB) et fusionné dans le dossier `eurobert_full/`. Une connexion internet est requise uniquement pour ce téléchargement initial.
 
 ## 📖 Utilisation
 
@@ -47,7 +120,7 @@ python commit_humor_classifier.py --interactive
 
 ### Mode Batch
 ```bash
-python commit_humor_classifier.py --batch test_messages.txt
+python commit_humor_classifier.py --batch votre_fichier.txt
 ```
 
 ### Traitement de Commits JSON
@@ -64,6 +137,15 @@ python process_commits_json.py commits.json --watch --interval 5
 # Afficher les statistiques détaillées
 python process_commits_json.py commits.json --stats
 ```
+
+### Variables d'Environnement
+
+| Variable | Description | Valeur par défaut | Exemple |
+|----------|-------------|-------------------|----------|
+| `COMMITS_JSON` | Chemin vers le fichier JSON de commits | `commits.json` | `set COMMITS_JSON=data/commits.json` |
+| `DEBUG_PREDICTIONS` | Active le logging des prédictions du modèle | `false` | `set DEBUG_PREDICTIONS=true` |
+
+> 💡 **Mode Debug** : Quand `DEBUG_PREDICTIONS=true`, chaque prédiction est loggée sur une seule ligne avec le statut (FUNNY/NORMAL), la probabilité et un extrait du message.
 
 ### Options Avancées
 ```bash
@@ -103,27 +185,25 @@ commit-humor-classifier/
 │   ├── commit_humor_classifier.py    # Classificateur principal
 │   ├── process_commits_json.py       # Traitement JSON en temps réel
 │   ├── install.py                    # Installation automatique
-│   └── quick_start.py                # Démarrage rapide pour nouveaux utilisateurs
-├── 🧪 Tests et Validation
-│   ├── test_installation.py          # Test d'installation (généré auto)
-│   ├── test_commits_evaluation.txt   # Messages de test
-│   └── test_messages.txt             # Exemples de test
-├── 📁 Modèle et Configuration
-│   ├── eurobert_full/                # Modèle téléchargé (créé auto)
+│   └── web_app.py                    # Interface web Flask
+├── 🎨 Interface Web
+│   └── templates/
+│       └── index.html                # Template de l'interface web
+├── 🤖 Modèle
+│   └── eurobert_full/                # Modèle fusionné (généré automatiquement)
+├── 📁 Configuration
 │   ├── requirements.txt              # Dépendances Python
+│   ├── config.json                   # Configuration du projet
+│   ├── commits.json                  # Fichier de commits (exemple)
 │   └── .gitignore                    # Fichiers ignorés
 ├── 🔧 Scripts Utilitaires
 │   ├── deploy.py                     # Script de déploiement et création d'archives
-│   ├── update.py                     # Script de mise à jour automatique
-│   └── config.json                   # Configuration du projet
-├── 📦 Déploiement
-│   ├── deployment_info.json          # Informations de déploiement
-│   └── deploy/                       # Dossier de déploiement (créé auto)
+│   └── update.py                     # Script de mise à jour automatique
 └── 📚 Documentation
     └── README.md                     # Documentation principale
 ```
 
-> 💡 **Note** : Le dossier `eurobert_full/` et `test_installation.py` sont créés automatiquement.
+> 💡 **Note** : Le dossier `eurobert_full/` contient le modèle fusionné prêt à l'emploi et est créé automatiquement lors de la première utilisation du classificateur.
 
 ## 🔧 Prérequis
 
@@ -142,7 +222,7 @@ commit-humor-classifier/
 
 ## 🚚 Déploiement
 
-### Déploiement Automatique
+### Création de Packages
 
 ```bash
 # Créer un package portable complet
@@ -158,18 +238,7 @@ python deploy.py --all
 python deploy.py --clean
 ```
 
-### Installation Manuelle
-```bash
-pip install -e .
-```
-
-### Distribution
-
-Le script `deploy.py` crée automatiquement :
-- Un package portable dans `deploy/package/`
-- Une archive ZIP dans `deploy/archives/`
-- Un script de démarrage rapide `quick_start.py`
-- Les informations de déploiement `deployment_info.json`
+Le script `deploy.py` permet de créer des packages portables et des archives ZIP pour faciliter la distribution du projet.
 
 ### Utilisation en tant que module
 ```python
@@ -215,8 +284,6 @@ print(result)
 ### Distribution et Déploiement
 - **Packages portables** : Distribution facile via `deploy.py`
 - **Archives ZIP** : Partage simplifié
-- **Installation automatique** : Déploiement en un clic
-- **Démarrage rapide** : Script `quick_start.py` pour nouveaux utilisateurs
 - **Mise à jour automatique** : Script `update.py` pour maintenir à jour
 - **Configuration centralisée** : Fichier `config.json` pour la personnalisation
 
@@ -294,8 +361,10 @@ Les résultats incluent la classification d'humour :
 
 ### Fichiers Techniques
 - `commit_humor_classifier.py` : Classe principale + CLI
-- `eurobert_full/` : Modèle fusionné prêt à l'emploi
-- `deploy_package.py` : Création de package portable
+- `process_commits_json.py` : Traitement des fichiers JSON de commits
+- `web_app.py` : Interface web Flask
+- `eurobert_full/` : Modèle fusionné prêt à l'emploi (généré automatiquement)
+- `deploy.py` : Création de packages portables
 
 ## 🔍 Métadonnées du Modèle
 
@@ -304,44 +373,6 @@ Les résultats incluent la classification d'humour :
 - **Classes** : [PAS DRÔLE, DRÔLE]
 - **Seuil par défaut** : 0.7
 - **Format** : PyTorch + Transformers
-
-## 🔄 Refusion LoRA
-
-### Intégration automatique après nouvel entraînement
-
-Le projet inclut un script de refusion automatique pour intégrer facilement un nouveau modèle LoRA après un entraînement :
-
-```bash
-# Activer l'environnement virtuel
-..\dataset_env\Scripts\activate
-
-# Fusionner un nouveau modèle LoRA
-python refusion_lora.py --lora_path ../eurobert_peft_v4 --output_path eurobert_full_v2
-
-# Tester le nouveau modèle
-python commit_humor_classifier.py --text "test message" --model_path eurobert_full_v2
-
-# Si satisfaisant, remplacer l'actuel avec sauvegarde
-python refusion_lora.py --lora_path ../eurobert_peft_v4 --replace_current --backup
-```
-
-### Options du script de refusion
-
-| Option | Description | Exemple |
-|--------|-------------|---------|
-| `--lora_path` | Chemin vers le modèle LoRA (obligatoire) | `../eurobert_peft_v4` |
-| `--output_path` | Nom du modèle fusionné | `eurobert_full_v2` |
-| `--replace_current` | Remplace le modèle actuel | Flag |
-| `--backup` | Crée une sauvegarde avant remplacement | Flag |
-
-**📖 Consultez [`REFUSION_GUIDE.md`](REFUSION_GUIDE.md) pour le guide complet**
-
-### Workflow recommandé
-
-1. **Entraîner** un nouveau modèle LoRA avec `optimize_eurobert_final.py`
-2. **Fusionner** avec `refusion_lora.py`
-3. **Tester** sur les données d'évaluation
-4. **Remplacer** le modèle actuel si satisfaisant
 
 ## 🔄 Maintenance et Mises à Jour
 

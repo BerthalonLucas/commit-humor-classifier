@@ -2,31 +2,139 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Commits Drôles</title>
+    <title>Commits Drôles - BDE</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #1e1e1e; color: #f0f0f0; margin: 0; padding: 20px; }
-        h1 { text-align: center; font-size: 3em; margin-bottom: 0.2em; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%); 
+            color: #f0f0f0; 
+            margin: 0; 
+            padding: 20px; 
+            min-height: 100vh;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2em;
+        }
+        h1 { 
+            font-size: 3em; 
+            margin-bottom: 0.2em; 
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .warning {
+            background: #ff4757;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
+            font-size: 0.9em;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+        }
+        .warning strong { color: #fff; }
         ul { list-style: none; padding: 0; max-width: 1200px; margin: auto; }
-        li { background: #333; margin: 0.5em 0; padding: 1em; border-radius: 8px; font-size: 1.5em; }
-        .prob { float: right; font-size: 0.7em; color: #9acd32; }
+        li { 
+            background: linear-gradient(135deg, #333 0%, #404040 100%); 
+            margin: 0.8em 0; 
+            padding: 1.2em; 
+            border-radius: 12px; 
+            font-size: 1.4em; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border-left: 4px solid #4ecdc4;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        li:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        .confidence-bar {
+            float: right;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.6em;
+        }
+        .bar-container {
+            width: 60px;
+            height: 8px;
+            background: #555;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        .confidence-low { background: #ff6b6b; }
+        .confidence-medium { background: #ffa726; }
+        .confidence-high { background: #66bb6a; }
+        .confidence-text {
+            color: #bbb;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
-    <h1>Commits Drôles</h1>
+    <div class="header">
+        <h1>🎭 Commits Drôles</h1>
+        <div class="warning">
+            <strong>⚠️ Attention :</strong> Ce modèle peut faire de <strong>grosses erreurs</strong> ! 
+            Il a été entraîné sur des données limitées et ses prédictions ne sont pas fiables à 100%. 
+            Prenez les résultats avec humour !
+        </div>
+    </div>
     <ul id="commit-list"></ul>
     <script>
+        function getConfidenceLevel(prob) {
+            if (prob < 0.75) return { level: 'low', text: 'Incertain' };
+            if (prob < 0.85) return { level: 'medium', text: 'Modéré' };
+            return { level: 'high', text: 'Confiant' };
+        }
+
         async function fetchCommits() {
             const resp = await fetch('/funny_commits');
             const commits = await resp.json();
             const list = document.getElementById('commit-list');
             list.innerHTML = '';
+            
+            if (commits.length === 0) {
+                const li = document.createElement('li');
+                li.innerHTML = '🤖 Aucun commit drôle détecté pour le moment...';
+                li.style.textAlign = 'center';
+                li.style.color = '#888';
+                list.appendChild(li);
+                return;
+            }
+            
             commits.forEach(c => {
                 const li = document.createElement('li');
                 li.textContent = c.message;
-                const span = document.createElement('span');
-                span.className = 'prob';
-                span.textContent = (c.probability * 100).toFixed(1) + '%';
-                li.appendChild(span);
+                
+                const confidenceDiv = document.createElement('div');
+                confidenceDiv.className = 'confidence-bar';
+                
+                const confidence = getConfidenceLevel(c.probability);
+                const barContainer = document.createElement('div');
+                barContainer.className = 'bar-container';
+                
+                const barFill = document.createElement('div');
+                barFill.className = `bar-fill confidence-${confidence.level}`;
+                barFill.style.width = (c.probability * 100) + '%';
+                
+                const confidenceText = document.createElement('span');
+                confidenceText.className = 'confidence-text';
+                confidenceText.textContent = confidence.text;
+                
+                barContainer.appendChild(barFill);
+                confidenceDiv.appendChild(barContainer);
+                confidenceDiv.appendChild(confidenceText);
+                
+                li.appendChild(confidenceDiv);
                 list.appendChild(li);
             });
         }

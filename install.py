@@ -102,7 +102,7 @@ def check_package_installed(package):
     except ImportError:
         return False
 
-def install_base_dependencies(force_cpu=False):
+def install_base_dependencies(force_cpu=True):
     """Installe les dépendances de base"""
     print("\n🔧 Installation des dépendances de base...")
 
@@ -214,64 +214,7 @@ def test_installation():
         print(f"❌ Erreur lors du test: {e}")
         return False
 
-def create_test_script():
-    """Crée un script de test rapide"""
-    test_script = '''#!/usr/bin/env python3
-"""
-Script de test rapide pour le classificateur d'humour
-"""
 
-import sys
-import os
-
-def test_model_download():
-    """Test le téléchargement et l'utilisation du modèle"""
-    try:
-        print("🧪 Test du classificateur...")
-        
-        # Import du classificateur
-        from commit_humor_classifier import CommitHumorClassifier
-        
-        # Initialisation
-        classifier = CommitHumorClassifier()
-        
-        # Chargement du modèle (téléchargement automatique si nécessaire)
-        print("📥 Chargement du modèle...")
-        if not classifier.load_model():
-            print("❌ Échec du chargement du modèle")
-            return False
-        
-        # Test de prédiction
-        test_messages = [
-            "fix: gcc et moi c'est compliqué",
-            "add: new feature",
-            "feat: add cat gifs because why not"
-        ]
-        
-        print("\n🎯 Tests de prédiction:")
-        for msg in test_messages:
-            result = classifier.predict(msg)
-            print(f"   📝 '{msg}' → {result}")
-        
-        print("\n✅ Test réussi !")
-        return True
-        
-    except Exception as e:
-        print(f"❌ Erreur lors du test: {e}")
-        return False
-
-if __name__ == "__main__":
-    test_model_download()
-'''
-    
-    try:
-        with open("test_installation.py", "w", encoding="utf-8") as f:
-            f.write(test_script)
-        print("📝 Script de test créé: test_installation.py")
-        return True
-    except Exception as e:
-        print(f"❌ Erreur lors de la création du script de test: {e}")
-        return False
 
 def main():
     """Fonction principale"""
@@ -321,16 +264,16 @@ def main():
             print("❌ Les tests d'installation ont échoué")
             sys.exit(1)
     
-    # Création du script de test
-    create_test_script()
-    
     print("\n" + "="*70)
     print("🎉 INSTALLATION TERMINÉE AVEC SUCCÈS !")
     print("="*70)
     print("\n📖 Étapes suivantes:")
-    print("   1. Testez l'installation: python test_installation.py")
-    print("   2. Utilisez le classificateur: python commit_humor_classifier.py \"votre message\"")
-    print("   3. Mode interactif: python commit_humor_classifier.py --interactive")
+    print("   1. Configurez la variable d'environnement COMMITS_JSON:")
+    print("      Windows: set COMMITS_JSON=chemin/vers/votre/fichier.json")
+    print("      Linux/Mac: export COMMITS_JSON=chemin/vers/votre/fichier.json")
+    print("   2. Installez Flask: pip install flask")
+    print("   3. Lancez l'interface web: python web_app.py")
+    print("   4. Ouvrez http://localhost:5000 dans votre navigateur")
     print("\n💡 Le modèle sera téléchargé automatiquement au premier usage (~420MB)")
     print("\n📚 Consultez README.md pour plus d'informations")
 
