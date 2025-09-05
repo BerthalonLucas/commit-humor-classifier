@@ -39,7 +39,7 @@ python install.py --force-cpu
 # Sinon, installation normale (télécharge +5Go de packages NVIDIA) :
 python install.py
 ```
-> 🚨 **WARNING IMPORTANT** : Sans le flag `--force-cpu`, le package `accelerate` installera automatiquement les packages NVIDIA qui font plus de 5Go ! Utilisez `--force-cpu` si vous n'avez pas de GPU ou peu d'espace.
+> 🚨 **WARNING** : Sans le flag `--force-cpu`, le package `accelerate` installera automatiquement les packages NVIDIA qui font plus de 5Go ! Utilisez `--force-cpu` si vous n'avez pas de GPU ou peu d'espace.
 
 ### 5. Configurer le fichier de commits
 ```bash
@@ -61,11 +61,28 @@ python web_app.py
 ```
 > 🌐 Ouvrez http://localhost:5000 pour voir les commits drôles s'afficher !
 
-# Interface web avec mode debug des prédictions
+### 8. Interface web avec mode debug des prédictions
+```bash
 set DEBUG_PREDICTIONS=true
 python web_app.py
+```
 
-**✅ C'est tout ! Pour une installation pendant un exam à 42, la partie ci-dessus suffit.**
+> 🚨 **AVERTISSEMENT** : Il est fortement recommandé d'activer le mode debug et d'effectuer un test initial avec d'anciens fichiers JSON de commits pour vérifier le bon fonctionnement du système.
+
+Voici un exemple des messages de logs en mode debug :
+
+```bash
+2025-09-05 08:28:36,153 - DEBUG - PREDICTION: [NORMAL] P=0.020 | oui
+2025-09-05 08:28:36,171 - DEBUG - PREDICTION: [NORMAL] P=0.136 | f ?
+2025-09-05 08:28:36,192 - DEBUG - PREDICTION: [FUNNY] P=0.848 | comment je me suis loupe sur l'exo deux la loose vrm
+```
+
+### 9. Message de fin
+
+> ⚠️ **NOTE IMPORTANTE** : Pour simplifier l'utilisation, il est recommandé de placer le fichier JSON directement dans le répertoire "commit-humor-classifier". Veuillez noter qu'un délai de 30 secondes à 1 minute est normal après l'ajout du fichier JSON - ce temps est nécessaire pour charger le modèle, analyser le fichier et traiter les messages un par un.
+
+
+**✅ C'est tout ! L'installation pour un examen à 42 cette partie suffit.**
 
 ---
 
